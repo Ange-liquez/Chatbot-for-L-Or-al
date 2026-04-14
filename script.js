@@ -1,4 +1,4 @@
-const WORKER_URL = "PASTE_YOUR_CLOUDFLARE_WORKER_URL_HERE";
+const WORKER_URL = "https://misty-snow-dff0.angeliquezometa.workers.dev";
 
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
@@ -118,10 +118,6 @@ chatForm.addEventListener("submit", async (e) => {
       return;
     }
 
-    if (WORKER_URL === "PASTE_YOUR_CLOUDFLARE_WORKER_URL_HERE") {
-      throw new Error("Add your deployed Cloudflare Worker URL in script.js.");
-    }
-
     const response = await fetch(WORKER_URL, {
       method: "POST",
       headers: {
@@ -145,7 +141,7 @@ chatForm.addEventListener("submit", async (e) => {
   } catch (error) {
     console.error(error);
     addMessage(
-      "I couldn’t connect to the AI service right now. Please verify your Cloudflare Worker URL and OpenAI secret, then try again.",
+      "I couldn’t connect to the AI service right now. Please verify your Cloudflare Worker setup and try again.",
       "bot"
     );
     statusText.textContent = error.message;
