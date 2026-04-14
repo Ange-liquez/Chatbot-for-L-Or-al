@@ -1,382 +1,105 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>L’Oréal Smart Beauty Advisor</title>
 
-:root {
-  --black: #111111;
-  --white: #ffffff;
-  --red: #e30b17;
-  --gold: #c8a24a;
-  --gold-deep: #a8842f;
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  --bg: #f8f5f1;
-  --card: #ffffff;
-  --soft: #f4efe9;
-  --line: #e4ddd5;
-  --muted: #6d675f;
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  --shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
-  --shadow-soft: 0 8px 18px rgba(0, 0, 0, 0.05);
+  <body>
+    <div class="page-wrapper">
+      <header class="site-header">
+        <div class="logo-wrap">
+          <img
+            src="loreal-logo.png"
+            alt="L'Oréal logo"
+            class="logo"
+            onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';"
+          />
+          <div class="logo-text">L’ORÉAL</div>
+        </div>
 
-  --radius-xl: 28px;
-  --radius-lg: 22px;
-  --radius-md: 16px;
-  --radius-sm: 12px;
-}
+        <p class="brand-kicker">ICONIC · RADIANT · PASSIONATE · ETERNAL</p>
 
-body {
-  font-family: "Montserrat", sans-serif;
-  background:
-    linear-gradient(135deg, #ffffff 0%, #f5eee7 35%, #ffffff 100%);
-  color: var(--black);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 28px 16px;
-}
+        <h1 class="site-title">Smart Beauty Advisor</h1>
+        <p class="site-subtitle">
+          Discover personalized beauty guidance inspired by L’Oréal skincare,
+          haircare, makeup, and fragrance.
+        </p>
 
-.page-wrapper {
-  width: 100%;
-  max-width: 980px;
-  background: var(--card);
-  border: 1px solid rgba(17, 17, 17, 0.08);
-  border-radius: 30px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  position: relative;
-}
+        <div class="hero-glamour">
+          <div class="glam-panel black-panel">
+            <span>ICONIC</span>
+            <small>black</small>
+          </div>
+          <div class="glam-panel white-panel">
+            <span>RADIANT</span>
+            <small>white</small>
+          </div>
+          <div class="glam-panel red-panel">
+            <span>PASSIONATE</span>
+            <small>red</small>
+          </div>
+          <div class="glam-panel gold-panel">
+            <span>ETERNAL</span>
+            <small>gold</small>
+          </div>
+        </div>
+      </header>
 
-/* black corner */
-.page-wrapper::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 115px;
-  height: 115px;
-  background: linear-gradient(135deg, var(--black) 0 20px, transparent 20px);
-  border-bottom-right-radius: 28px;
-  pointer-events: none;
-}
+      <main>
+        <section class="chatbox">
+          <div class="chatbox-top">
+            <div>
+              <h2>Beauty Chat</h2>
+              <p>Ask about skincare, makeup, haircare, fragrance, and routines.</p>
+            </div>
+            <span class="status-badge">AI Powered</span>
+          </div>
 
-/* gold ring corner */
-.page-wrapper::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 170px;
-  height: 170px;
-  background:
-    repeating-radial-gradient(
-      circle at top right,
-      transparent 0 11px,
-      rgba(200, 162, 74, 0.65) 11px 13px
-    );
-  transform: scale(0.78);
-  transform-origin: top right;
-  border-bottom-left-radius: 36px;
-  pointer-events: none;
-}
+          <div id="questionPreview" class="question-preview hidden"></div>
+          <div id="chatWindow" class="chat-window"></div>
 
-.site-header {
-  text-align: center;
-  padding: 50px 24px 30px;
-  background:
-    linear-gradient(180deg, #ffffff 0%, #fbf7f3 100%);
-  border-bottom: 1px solid rgba(17, 17, 17, 0.05);
-}
+          <form id="chatForm" class="chat-form">
+            <label for="userInput" class="visually-hidden">Ask a question</label>
+            <input
+              id="userInput"
+              type="text"
+              placeholder="Ask me about L’Oréal products or routines..."
+              autocomplete="off"
+              maxlength="500"
+              required
+            />
+            <button type="submit" id="sendBtn" aria-label="Send message">
+              <span class="material-icons">send</span>
+            </button>
+          </form>
 
-.logo-wrap {
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-}
+          <p id="statusText" class="status-text"></p>
+        </section>
+      </main>
 
-.logo {
-  width: 180px;
-  max-width: 75%;
-  height: auto;
-  display: block;
-}
+      <footer class="site-footer">
+        <p>© 2026 L’Oréal-inspired student project</p>
+        <nav>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Contact</a>
+        </nav>
+      </footer>
+    </div>
 
-.logo-text {
-  display: none;
-  font-size: 2rem;
-  font-weight: 300;
-  letter-spacing: 0.24em;
-  color: var(--black);
-}
-
-.site-title {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2.5rem, 4vw, 4.2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  margin-bottom: 12px;
-  color: var(--black);
-}
-
-.site-subtitle {
-  max-width: 650px;
-  margin: 0 auto;
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-main {
-  padding: 28px;
-}
-
-.chatbox {
-  background: linear-gradient(180deg, #fffdfa 0%, #f7f0e9 100%);
-  border: 1px solid rgba(17, 17, 17, 0.06);
-  border-radius: var(--radius-xl);
-  padding: 22px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.chatbox-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-}
-
-.chatbox-top h2 {
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.9rem;
-  font-weight: 600;
-  color: var(--black);
-  margin-bottom: 4px;
-}
-
-.chatbox-top p {
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.status-badge {
-  background: var(--black);
-  color: var(--white);
-  padding: 9px 15px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.question-preview {
-  margin-bottom: 16px;
-  padding: 14px 16px;
-  background: #fff8f8;
-  border: 1px solid #f0d2d4;
-  border-left: 4px solid var(--red);
-  border-radius: var(--radius-sm);
-  color: var(--black);
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-soft);
-}
-
-.hidden {
-  display: none;
-}
-
-.chat-window {
-  min-height: 430px;
-  max-height: 560px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 8px 4px 18px;
-}
-
-.chat-window::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-window::-webkit-scrollbar-thumb {
-  background: #d7cdc4;
-  border-radius: 999px;
-}
-
-.chat-window::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.message {
-  display: flex;
-  width: 100%;
-}
-
-.user-message {
-  justify-content: flex-end;
-}
-
-.bot-message {
-  justify-content: flex-start;
-}
-
-.message-bubble {
-  max-width: 78%;
-  padding: 15px 17px;
-  border-radius: 20px;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.user-message .message-bubble {
-  background: linear-gradient(135deg, var(--black) 0%, #232323 100%);
-  color: var(--white);
-  border-bottom-right-radius: 8px;
-  box-shadow: 0 10px 22px rgba(17, 17, 17, 0.14);
-}
-
-.bot-message .message-bubble {
-  background: linear-gradient(180deg, #ffffff 0%, #f7f1eb 100%);
-  color: var(--black);
-  border: 1px solid rgba(17, 17, 17, 0.05);
-  border-left: 4px solid var(--gold);
-  border-bottom-left-radius: 8px;
-  box-shadow: var(--shadow-soft);
-}
-
-.chat-form {
-  display: grid;
-  grid-template-columns: 1fr 58px;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.chat-form input {
-  width: 100%;
-  padding: 16px 18px;
-  border: 1px solid #e6b6ba;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.98);
-  font-size: 16px;
-  color: var(--black);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.chat-form input:focus {
-  outline: none;
-  border-color: var(--red);
-  box-shadow: 0 0 0 4px rgba(227, 11, 23, 0.14);
-}
-
-.chat-form button {
-  border: none;
-  border-radius: 18px;
-  background: linear-gradient(180deg, var(--red) 0%, #b70711 100%);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 10px 18px rgba(227, 11, 23, 0.25);
-  transition: transform 0.18s ease, opacity 0.2s ease;
-}
-
-.chat-form button:hover {
-  transform: translateY(-2px);
-}
-
-.chat-form button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.chat-form button .material-icons {
-  font-size: 24px;
-}
-
-.status-text {
-  min-height: 22px;
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.site-footer {
-  text-align: center;
-  padding: 22px 24px 28px;
-  border-top: 1px solid rgba(17, 17, 17, 0.06);
-  background: #fcfaf8;
-}
-
-.site-footer p {
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-
-.site-footer nav {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.site-footer a {
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.site-footer a:hover {
-  color: var(--red);
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  main {
-    padding: 18px;
-  }
-
-  .chatbox {
-    padding: 16px;
-  }
-
-  .message-bubble {
-    max-width: 90%;
-  }
-}
-
-@media (max-width: 540px) {
-  body {
-    padding: 12px;
-  }
-
-  .site-header {
-    padding: 30px 16px 22px;
-  }
-
-  main {
-    padding: 14px;
-  }
-
-  .chat-form {
-    grid-template-columns: 1fr 52px;
-  }
-}
+    <script src="script.js"></script>
+  </body>
+</html>
