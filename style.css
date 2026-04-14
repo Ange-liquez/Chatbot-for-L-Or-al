@@ -8,15 +8,14 @@
   --black: #111111;
   --white: #ffffff;
   --red: #d61f26;
-  --red-dark: #b3171d;
-  --cream: #f8f3ef;
-  --soft: #f5efea;
-  --soft-2: #fcf8f5;
-  --line: #e4d7cf;
-  --muted: #6d6560;
-  --shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+  --red-deep: #b3171d;
+  --soft: #f8f4f1;
+  --soft-2: #f3ece7;
+  --line: #e4d8cf;
+  --muted: #6e6660;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
   --shadow-sm: 0 8px 18px rgba(0, 0, 0, 0.05);
-  --radius-xl: 28px;
+  --radius-xl: 30px;
   --radius-lg: 22px;
   --radius-md: 16px;
   --radius-sm: 12px;
@@ -24,12 +23,12 @@
 
 body {
   font-family: "Montserrat", sans-serif;
-  background: linear-gradient(180deg, #fffdfb 0%, #f7f0ea 100%);
+  background: linear-gradient(180deg, #fffdfb 0%, #f7efe9 100%);
   color: var(--black);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   padding: 28px 16px;
-  min-height: 100vh;
 }
 
 .page-wrapper {
@@ -40,23 +39,55 @@ body {
   border-radius: 30px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  position: relative;
+}
+
+.page-wrapper::before,
+.page-wrapper::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.page-wrapper::before {
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
+  background: linear-gradient(135deg, var(--black) 0 18px, transparent 18px);
+  border-bottom-right-radius: 28px;
+}
+
+.page-wrapper::after {
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 160px;
+  background: repeating-radial-gradient(
+    circle at top right,
+    transparent 0 11px,
+    rgba(17, 17, 17, 0.22) 11px 13px
+  );
+  border-bottom-left-radius: 40px;
+  transform: scale(0.8);
+  transform-origin: top right;
 }
 
 .site-header {
   text-align: center;
-  padding: 42px 24px 28px;
+  padding: 46px 24px 30px;
   background:
-    radial-gradient(circle at top center, rgba(214, 31, 38, 0.08), transparent 45%),
-    linear-gradient(180deg, #ffffff 0%, #fcf8f6 100%);
+    radial-gradient(circle at top center, rgba(214, 31, 38, 0.08), transparent 42%),
+    linear-gradient(180deg, #ffffff 0%, #fcf8f5 100%);
   border-bottom: 1px solid rgba(17, 17, 17, 0.06);
 }
 
 .logo-wrap {
   min-height: 50px;
-  margin-bottom: 14px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .logo {
@@ -67,6 +98,8 @@ body {
 }
 
 .logo-text {
+  display: none;
+  font-family: "Montserrat", sans-serif;
   font-size: 2rem;
   font-weight: 300;
   letter-spacing: 0.22em;
@@ -74,10 +107,12 @@ body {
 }
 
 .site-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.4rem, 4vw, 4rem);
   font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 12px;
 }
 
 .site-subtitle {
@@ -93,11 +128,11 @@ main {
 }
 
 .chatbox {
-  background: linear-gradient(180deg, var(--soft-2) 0%, var(--cream) 100%);
+  background: linear-gradient(180deg, #fcf8f5 0%, #f7f0ea 100%);
   border: 1px solid rgba(17, 17, 17, 0.05);
   border-radius: var(--radius-xl);
   padding: 22px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .chatbox-top {
@@ -110,13 +145,15 @@ main {
 }
 
 .chatbox-top h2 {
-  font-size: 1.35rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.8rem;
+  font-weight: 600;
   margin-bottom: 4px;
 }
 
 .chatbox-top p {
-  color: var(--muted);
   font-size: 0.96rem;
+  color: var(--muted);
 }
 
 .status-badge {
@@ -136,9 +173,9 @@ main {
   border: 1px solid #f0cccc;
   border-left: 4px solid var(--red);
   border-radius: var(--radius-sm);
+  color: var(--black);
   font-size: 0.96rem;
   font-weight: 600;
-  color: var(--black);
   box-shadow: var(--shadow-sm);
 }
 
@@ -189,8 +226,8 @@ main {
   border-radius: 20px;
   font-size: 0.98rem;
   line-height: 1.7;
-  word-break: break-word;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .user-message .message-bubble {
@@ -223,7 +260,7 @@ main {
   background: rgba(255, 255, 255, 0.98);
   font-size: 16px;
   color: var(--black);
-  transition: 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chat-form input:focus {
@@ -235,7 +272,7 @@ main {
 .chat-form button {
   border: none;
   border-radius: 18px;
-  background: linear-gradient(180deg, var(--red) 0%, var(--red-dark) 100%);
+  background: linear-gradient(180deg, var(--red) 0%, var(--red-deep) 100%);
   color: var(--white);
   display: flex;
   align-items: center;
@@ -295,6 +332,15 @@ main {
   color: var(--red);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
   main {
     padding: 18px;
@@ -315,7 +361,7 @@ main {
   }
 
   .site-header {
-    padding: 28px 16px 20px;
+    padding: 30px 16px 22px;
   }
 
   main {
