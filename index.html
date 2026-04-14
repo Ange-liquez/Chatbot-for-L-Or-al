@@ -10,7 +10,7 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -27,12 +27,13 @@
             class="logo"
             onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block';"
           />
-          <div class="logo-text" style="display:none;">L’ORÉAL</div>
+          <div class="logo-text">L’ORÉAL</div>
         </div>
 
         <h1 class="site-title">Smart Beauty Advisor</h1>
         <p class="site-subtitle">
-          Discover L’Oréal products, routines, and personalized beauty guidance
+          Explore personalized beauty guidance inspired by L’Oréal skincare,
+          haircare, makeup, and fragrance.
         </p>
       </header>
 
@@ -51,6 +52,7 @@
           <div id="chatWindow" class="chat-window"></div>
 
           <form id="chatForm" class="chat-form">
+            <label for="userInput" class="visually-hidden">Ask a question</label>
             <input
               id="userInput"
               type="text"
