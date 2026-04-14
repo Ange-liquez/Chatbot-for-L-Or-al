@@ -145,7 +145,7 @@ chatForm.addEventListener("submit", async (e) => {
   } catch (error) {
     console.error(error);
     addMessage(
-      "There was a connection issue while reaching the AI service. Please check your Worker setup and try again.",
+      "I couldn’t connect to the AI service right now. Please verify your Cloudflare Worker URL and OpenAI secret, then try again.",
       "bot"
     );
     statusText.textContent = error.message;
