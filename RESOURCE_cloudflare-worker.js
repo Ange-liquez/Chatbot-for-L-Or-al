@@ -29,6 +29,13 @@ export default {
       const apiKey = env.OPENAI_API_KEY;
       const body = await request.json();
 
+      if (!apiKey) {
+        return new Response(
+          JSON.stringify({ error: "Missing OPENAI_API_KEY secret." }),
+          { status: 500, headers: corsHeaders }
+        );
+      }
+
       if (!body.messages || !Array.isArray(body.messages)) {
         return new Response(
           JSON.stringify({ error: "Missing messages array." }),
