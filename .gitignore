@@ -1,1 +1,110 @@
+/* DOM elements */
+const chatForm = document.getElementById("chatForm");
+const userInput = document.getElementById("userInput");
+const chatWindow = document.getElementById("chatWindow");
+const latestQuestion = document.getElementById("latestQuestion");
+const latestQuestionText = document.getElementById("latestQuestionText");
 
+/* Conversation history for multi-turn chat */
+const messages = [
+  {
+    role: "system",
+    content:
+      "You are a professional L'Oréal beauty assistant. Only answer questions related to L'Oréal products, skincare, makeup, haircare, fragrance, beauty routines, and general beauty guidance. If a user asks something unrelated, politely refuse and guide them back to L'Oréal or beauty-related topics. Keep responses helpful, friendly, and concise.",
+  },
+];
+
+/* Handle form submit */
+chatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userMessage = userInput.value.trim();
+  if (!userMessage) return;
+
+  appendMessage(userMessage, "user");
+  updateLatestQuestion(userMessage);
+
+  messages.push({
+    role: "user",
+    content: userMessage,
+  });
+
+  userInput.value = "";
+
+  const loadingBubble = appendMessage("Typing...", "assistant", true);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: messages,
+        temperature: 0.7,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    const assistantReply =
+      data?.choices?.[0]?.message?.content ||
+      "Sorry, I could not generate a response right now.";
+
+    loadingBubble.remove();
+
+    appendMessage(assistantReply, "assistant");
+
+    messages.push({
+      role: "assistant",
+      content: assistantReply,
+    });
+  } catch (error) {
+    loadingBubble.remove();
+
+    appendMessage(
+      "Sorry, something went wrong while connecting to the AI. Please check your API key or try again.",
+      "assistant"
+    );
+
+    console.error("Error:", error);
+  }
+});
+
+/* Add a message bubble to the chat window */
+function appendMessage(text, sender, isTemporary = false) {
+  const messageWrapper = document.createElement("div");
+  messageWrapper.classList.add("message");
+
+  if (sender === "user") {
+    messageWrapper.classList.add("user-message");
+  } else {
+    messageWrapper.classList.add("assistant-message");
+  }
+
+  const messageContent = document.createElement("div");
+  messageContent.classList.add("message-content");
+  messageContent.textContent = text;
+
+  if (isTemporary) {
+    messageWrapper.dataset.temporary = "true";
+  }
+
+  messageWrapper.appendChild(messageContent);
+  chatWindow.appendChild(messageWrapper);
+
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  return messageWrapper;
+}
+
+/* Show the user's latest question above the chat */
+function updateLatestQuestion(questionText) {
+  latestQuestion.classList.remove("hidden");
+  latestQuestionText.textContent = questionText;
+}
