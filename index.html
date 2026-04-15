@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>L’Oréal Beauty Assistant</title>
+    <title>L'Oréal Beauty Assistant</title>
 
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -20,28 +20,60 @@
   <body>
     <div class="page-wrapper">
       <header class="site-header">
-        <h1 class="site-title">L’Oréal Beauty Assistant</h1>
-        <p>
-          Ask about skincare, makeup, haircare, fragrance, and personalized beauty routines.
-        </p>
+        <div class="brand-block">
+          <p class="brand-label">L'Oréal Paris</p>
+          <h1 class="site-title">Beauty Assistant</h1>
+          <p class="site-subtitle">
+            Ask about skincare, makeup, haircare, fragrance, and personalized
+            beauty routines.
+          </p>
+        </div>
       </header>
 
-      <main>
+      <main class="main-content">
+        <section class="hero-card">
+          <h2>Your AI-Powered L'Oréal Chatbot</h2>
+          <p>
+            Get product suggestions, beauty tips, and routine recommendations
+            tailored to your needs.
+          </p>
+        </section>
+
         <section class="chatbox">
-          <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+          <div class="chat-header">
+            <span class="material-icons">auto_awesome</span>
+            <div>
+              <h3>Live Chat</h3>
+              <p>Powered by AI for L'Oréal beauty guidance</p>
+            </div>
+          </div>
+
+          <div id="latestQuestion" class="latest-question hidden">
+            <span class="question-label">Latest question:</span>
+            <p id="latestQuestionText"></p>
+          </div>
+
+          <div id="chatWindow" class="chat-window" aria-live="polite">
+            <div class="message assistant-message">
+              <div class="message-content">
+                Hi! I’m your L'Oréal Beauty Assistant. Ask me about skincare,
+                makeup, haircare, fragrances, or a beauty routine.
+              </div>
+            </div>
+          </div>
 
           <form id="chatForm" class="chat-form">
-            <label for="userInput" class="visually-hidden">Ask a question</label>
+            <label for="userInput" class="visually-hidden">Message</label>
             <input
               id="userInput"
               name="userInput"
               type="text"
-              placeholder="Ask about L’Oréal products or beauty routines..."
+              placeholder="Ask about a skincare routine, foundation match, haircare, or fragrance..."
               autocomplete="off"
               required
             />
-            <button type="submit" id="sendBtn">
-              <span class="material-icons">arrow_upward</span>
+            <button type="submit" id="sendBtn" aria-label="Send message">
+              <span class="material-icons">send</span>
               <span class="visually-hidden">Send</span>
             </button>
           </form>
@@ -49,7 +81,7 @@
       </main>
 
       <footer class="site-footer">
-        <p>&copy; 2025 L’Oréal Beauty Assistant</p>
+        <p>&copy; 2025 L'Oréal Beauty Assistant</p>
         <nav>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Use</a>
@@ -58,6 +90,7 @@
       </footer>
     </div>
 
+    <script src="secrets.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
