@@ -3,11 +3,8 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
-/* IMPORTANT:
-   Replace this with your deployed Cloudflare Worker URL
-   Example: https://loreal-chatbot.yourname.workers.dev
-*/
-const WORKER_URL = "YOUR_CLOUDFLARE_WORKER_URL_HERE";
+/* Your deployed Cloudflare Worker URL */
+const WORKER_URL = "https://misty-snow-dff0.angeliquezometa.workers.dev/";
 
 /* Conversation history for extra credit */
 const messages = [
@@ -18,7 +15,8 @@ const messages = [
   },
   {
     role: "assistant",
-    content: "👋 Hello! I’m your L’Oréal beauty assistant. Ask me about products, routines, skincare, makeup, haircare, or fragrance."
+    content:
+      "👋 Hello! I’m your L’Oréal beauty assistant. Ask me about products, routines, skincare, makeup, haircare, or fragrance."
   }
 ];
 
@@ -49,11 +47,12 @@ chatForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ messages })
     });
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
     const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Worker error:", data);
+      throw new Error(data.error || `Request failed with status ${response.status}`);
+    }
 
     const assistantReply =
       data?.choices?.[0]?.message?.content ||
@@ -71,7 +70,7 @@ chatForm.addEventListener("submit", async (e) => {
     messages.push({
       role: "assistant",
       content:
-        "Sorry, I’m having trouble connecting right now. Please check your Cloudflare Worker URL and try again."
+        "Sorry, I’m having trouble connecting right now. Please check your Cloudflare Worker and API key settings."
     });
 
     renderChat();
