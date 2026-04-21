@@ -8,17 +8,15 @@ export default {
     }
 
     if (request.method !== "POST") {
-      return new Response(JSON.stringify({ error: "Method not allowed" }), {
-        status: 405,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders()
-        }
-      });
+      return jsonResponse({ error: "Method not allowed" }, 405);
     }
 
     try {
       const { messages } = await request.json();
+
+      if (!messages || !Array.isArray(messages)) {
+        return jsonResponse({ error: "Missing or invalid messages array." }, 400);
+      }
 
       const openaiResponse = await fetch(
         "https://api.openai.com/v1/chat/completions",
@@ -26,11 +24,12 @@ export default {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${env.OPENAI_API_KEY}`
+            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
-            messages: messages
+            messages,
+            temperature: 0.7
           })
         }
       );
@@ -38,39 +37,23 @@ export default {
       const data = await openaiResponse.json();
 
       if (!openaiResponse.ok) {
-        return new Response(
-          JSON.stringify({ error: data.error?.message || "OpenAI error" }),
-          {
-            status: 500,
-            headers: {
-              "Content-Type": "application/json",
-              ...corsHeaders()
-            }
-          }
+        return jsonResponse(
+          { error: data?.error?.message || "OpenAI request failed." },
+          openaiResponse.status
         );
       }
 
-      return new Response(
-        JSON.stringify({
-          reply: data.choices[0].message.content
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders()
-          }
-        }
-      );
-    } catch (err) {
-      return new Response(
-        JSON.stringify({ error: err.message }),
-        {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders()
-          }
-        }
+      const reply = data?.choices?.[0]?.message?.content;
+
+      if (!reply) {
+        return jsonResponse({ error: "No reply returned from OpenAI." }, 500);
+      }
+
+      return jsonResponse({ reply }, 200);
+    } catch (error) {
+      return jsonResponse(
+        { error: error.message || "Something went wrong." },
+        500
       );
     }
   }
@@ -82,4 +65,14 @@ function corsHeaders() {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   };
+}
+
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders()
+    }
+  });
 }
