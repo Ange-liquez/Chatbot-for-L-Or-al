@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>L'Oréal Smart Advisor</title>
 
@@ -10,67 +10,30 @@
 </head>
 
 <body>
-  <div class="page-wrapper">
+  <div class="container">
+    <h1>L'Oréal Smart Routine Builder</h1>
 
-    <header class="site-header">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/L%27Or%C3%A9al_logo.svg" class="logo"/>
-      <h1>Smart Routine Advisor</h1>
-
-      <div class="nav">
-        <button onclick="goDashboard()">Dashboard</button>
-        <button onclick="logout()">Logout</button>
-        <button onclick="toggleDark()">🌙</button>
-      </div>
-    </header>
-
-    <!-- USER PROFILE -->
-    <div class="profile-box">
-      <label>Skin Type:</label>
-      <select onchange="updateSkin(this.value)">
-        <option value="normal">Normal</option>
-        <option value="oily">Oily</option>
-        <option value="dry">Dry</option>
-        <option value="acne-prone">Acne-Prone</option>
-      </select>
-    </div>
-
-    <!-- CATEGORY -->
     <select id="categoryFilter">
       <option value="">Select Category</option>
       <option value="cleanser">Cleanser</option>
       <option value="moisturizer">Moisturizer</option>
       <option value="skincare">Skincare</option>
-      <option value="haircare">Haircare</option>
       <option value="makeup">Makeup</option>
-      <option value="fragrance">Fragrance</option>
     </select>
 
-    <!-- PRODUCTS -->
     <div id="productsContainer"></div>
 
-    <!-- SELECTED -->
-    <div class="selected-products">
-      <h2>Selected Products</h2>
-      <div id="selectedProductsList"></div>
-      <button id="generateRoutine">✨ Generate Routine</button>
-    </div>
+    <h2>Selected Products</h2>
+    <div id="selectedProducts"></div>
 
-    <!-- CHAT -->
-    <div class="chatbox">
-      <h2>AI Assistant</h2>
-      <div id="chatWindow"></div>
+    <button id="generateRoutine">Generate Routine</button>
 
-      <form id="chatForm">
-        <input id="userInput" required placeholder="Ask something..."/>
-        <button type="submit">Send</button>
-      </form>
-    </div>
+    <div id="chatWindow"></div>
 
-  </div>
-
-  <!-- MODAL -->
-  <div id="modal" class="modal" onclick="this.style.display='none'">
-    <div id="modalContent" class="modal-content"></div>
+    <form id="chatForm">
+      <input id="userInput" placeholder="Ask something..." />
+      <button>Send</button>
+    </form>
   </div>
 
   <script src="script.js"></script>
