@@ -1,11 +1,9 @@
-/* ---------- Reset ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ---------- Base ---------- */
 body {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   color: #333;
@@ -21,7 +19,6 @@ body {
   max-width: 1000px;
 }
 
-/* ---------- Header ---------- */
 .site-header {
   text-align: center;
   padding-top: 50px;
@@ -40,7 +37,6 @@ body {
   color: #111;
 }
 
-/* ---------- Category Filter ---------- */
 .search-section {
   margin: 30px 0;
   display: flex;
@@ -63,7 +59,6 @@ body {
   border-color: #ff003b;
 }
 
-/* ---------- Products Grid ---------- */
 .products-grid {
   display: flex;
   flex-wrap: wrap;
@@ -164,7 +159,6 @@ body {
   display: none;
 }
 
-/* ---------- Selected Products ---------- */
 .selected-products {
   margin: 40px 0;
   padding: 20px;
@@ -211,8 +205,7 @@ body {
   color: #666;
 }
 
-.remove-btn,
-.remove {
+.remove-btn {
   padding: 8px 12px;
   font-size: 13px;
   font-weight: 500;
@@ -224,8 +217,7 @@ body {
   transition: background 0.2s ease;
 }
 
-.remove-btn:hover,
-.remove:hover {
+.remove-btn:hover {
   background: #e3e3e3;
 }
 
@@ -260,7 +252,6 @@ body {
   font-size: 17px;
 }
 
-/* ---------- Chat Section ---------- */
 .chatbox {
   margin: 40px 0;
   border: 2px solid #111;
@@ -306,7 +297,6 @@ body {
   color: #222;
 }
 
-/* ---------- Input Row ---------- */
 .chat-form {
   display: flex;
   gap: 12px;
@@ -353,7 +343,6 @@ body {
   outline-offset: 2px;
 }
 
-/* ---------- Accessibility ---------- */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -363,4 +352,67 @@ body {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-  border: 0
+  border: 0;
+}
+
+.site-footer {
+  margin: 60px 0 40px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.site-footer nav {
+  margin-top: 12px;
+}
+
+.site-footer a {
+  margin: 0 8px;
+  color: #111;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #ff003b;
+}
+
+@media (max-width: 900px) {
+  .product-card {
+    flex: 0 1 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 640px) {
+  .page-wrapper {
+    width: 94%;
+  }
+
+  .site-title {
+    font-size: 22px;
+  }
+
+  .logo {
+    width: 200px;
+  }
+
+  .product-card {
+    flex: 0 1 100%;
+  }
+
+  .selected-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .remove-btn {
+    width: 100%;
+  }
+
+  .chat-window {
+    min-height: 220px;
+  }
+
+  .chat-form input {
+    font-size: 16px;
+  }
+}
