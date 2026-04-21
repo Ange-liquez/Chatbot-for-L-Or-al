@@ -1,280 +1,127 @@
 const WORKER_URL = "https://shrill-bush-9db8.angeliquezometa.workers.dev";
 
 let allProducts = [];
-let selectedProducts = JSON.parse(localStorage.getItem("selectedProducts")) || [];
+let selectedProducts = [];
 
-let chatHistory = [
-  {
-    role: "system",
-    content:
-      "You are a L'Oréal beauty advisor. Only give advice based on selected products and beauty-related topics. Do not recommend products not selected unless asked. If the user asks for a routine, use only the selected products."
-  }
-];
+let user = JSON.parse(localStorage.getItem("user")) || {
+  name: "Guest",
+  skinType: "normal"
+};
+
+localStorage.setItem("user", JSON.stringify(user));
 
 const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const selectedProductsList = document.getElementById("selectedProductsList");
-const generateBtn = document.getElementById("generateRoutine");
-const chatForm = document.getElementById("chatForm");
-const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
-if (productsContainer) {
-  productsContainer.innerHTML = `
-    <div class="placeholder-message">
-      Select a category to view products
-    </div>
-  `;
-}
+/* LOAD */
+fetch("products.json")
+  .then(r => r.json())
+  .then(data => allProducts = data.products);
 
-document.addEventListener("DOMContentLoaded", async () => {
-  addMessage("👋 Select products to build your routine!", "assistant");
-
-  await loadProducts();
-  renderSelectedProducts();
-
-  categoryFilter.addEventListener("change", renderProducts);
-  generateBtn.addEventListener("click", generateRoutine);
-  chatForm.addEventListener("submit", handleChat);
-});
-
-async function loadProducts() {
-  try {
-    const response = await fetch("./products.json");
-
-    if (!response.ok) {
-      throw new Error(`Could not load products.json (${response.status})`);
-    }
-
-    const data = await response.json();
-
-    if (Array.isArray(data)) {
-      allProducts = data;
-    } else if (Array.isArray(data.products)) {
-      allProducts = data.products;
-    } else {
-      throw new Error("products.json format is invalid.");
-    }
-
-    allProducts = allProducts.map((product, index) => ({
-      id: product.id ?? index + 1,
-      name: product.name ?? "Unnamed Product",
-      brand: product.brand ?? "Unknown Brand",
-      category: product.category ?? "skincare",
-      image: product.image ?? "https://via.placeholder.com/150",
-      description: product.description ?? "No description available."
-    }));
-  } catch (error) {
-    console.error("Error loading products:", error);
-    productsContainer.innerHTML = `
-      <div class="placeholder-message">
-        Sorry, I couldn’t load the product list.
-      </div>
-    `;
-    addMessage("There was a problem loading the product list.", "assistant");
-  }
-}
+/* CATEGORY */
+categoryFilter.addEventListener("change", renderProducts);
 
 function renderProducts() {
-  const selectedCategory = categoryFilter.value;
+  const filtered = allProducts.filter(p => p.category === categoryFilter.value);
 
-  if (!selectedCategory) {
-    productsContainer.innerHTML = `
-      <div class="placeholder-message">
-        Select a category to view products
+  productsContainer.innerHTML = filtered.map(p => `
+    <div class="card ${selectedProducts.some(x=>x.id===p.id) ? "selected" : ""}" data-id="${p.id}">
+      <div class="heart" onclick="event.stopPropagation(); toggleProduct(${p.id})">
+        ${selectedProducts.some(x=>x.id===p.id) ? "❤️" : "🤍"}
       </div>
-    `;
-    return;
-  }
+      <img src="${p.image}">
+      <h3>${p.name}</h3>
+      <p>${p.brand}</p>
+      <button onclick="event.stopPropagation(); showModal(${p.id})">View</button>
+    </div>
+  `).join("");
 
-  const filteredProducts = allProducts.filter(
-    (product) => product.category === selectedCategory
+  document.querySelectorAll(".card").forEach(c =>
+    c.onclick = () => toggleProduct(Number(c.dataset.id))
   );
-
-  if (filteredProducts.length === 0) {
-    productsContainer.innerHTML = `
-      <div class="placeholder-message">
-        No products found in this category.
-      </div>
-    `;
-    return;
-  }
-
-  productsContainer.innerHTML = filteredProducts
-    .map((product) => {
-      const isSelected = selectedProducts.some((p) => p.id === product.id);
-
-      return `
-        <div class="product-card ${isSelected ? "selected" : ""}" data-id="${product.id}">
-          <img src="${product.image}" alt="${product.name}" class="product-image" />
-          <div class="product-info">
-            <h3>${product.name}</h3>
-            <p class="brand">${product.brand}</p>
-            <p class="category">${product.category}</p>
-            <button type="button" class="desc-btn">Details</button>
-            <div class="desc hidden">${product.description}</div>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-
-  attachProductCardEvents();
 }
 
-function attachProductCardEvents() {
-  const cards = document.querySelectorAll(".product-card");
+/* SELECT */
+function toggleProduct(id) {
+  const p = allProducts.find(x=>x.id===id);
 
-  cards.forEach((card) => {
-    const productId = Number(card.dataset.id);
-    const product = allProducts.find((p) => p.id === productId);
-    const descBtn = card.querySelector(".desc-btn");
-    const descBox = card.querySelector(".desc");
-
-    card.addEventListener("click", (event) => {
-      if (event.target.classList.contains("desc-btn")) return;
-      toggleProduct(product);
-    });
-
-    descBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      descBox.classList.toggle("hidden");
-      descBtn.textContent = descBox.classList.contains("hidden")
-        ? "Details"
-        : "Hide Details";
-    });
-  });
-}
-
-function toggleProduct(product) {
-  const exists = selectedProducts.some((p) => p.id === product.id);
-
-  if (exists) {
-    selectedProducts = selectedProducts.filter((p) => p.id !== product.id);
+  if (selectedProducts.some(x=>x.id===id)) {
+    selectedProducts = selectedProducts.filter(x=>x.id!==id);
   } else {
-    selectedProducts.push(product);
+    selectedProducts.push(p);
   }
 
-  saveSelections();
   renderProducts();
-  renderSelectedProducts();
+  renderSelected();
 }
 
-function renderSelectedProducts() {
-  if (!selectedProductsList) return;
-
-  if (selectedProducts.length === 0) {
-    selectedProductsList.innerHTML = `<p class="empty-state">No products selected yet.</p>`;
-    return;
-  }
-
-  selectedProductsList.innerHTML = selectedProducts
-    .map(
-      (product) => `
-        <div class="selected-item">
-          <div class="selected-text">
-            <strong>${product.name}</strong>
-            <span>${product.brand}</span>
-          </div>
-          <button type="button" class="remove-btn" data-id="${product.id}">Remove</button>
-        </div>
-      `
-    )
-    .join("");
-
-  const removeButtons = selectedProductsList.querySelectorAll(".remove-btn");
-
-  removeButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const productId = Number(button.dataset.id);
-      selectedProducts = selectedProducts.filter((p) => p.id !== productId);
-      saveSelections();
-      renderProducts();
-      renderSelectedProducts();
-    });
-  });
+function renderSelected() {
+  selectedProductsList.innerHTML = selectedProducts.map(p=>`<div>${p.name}</div>`).join("");
 }
 
-function saveSelections() {
-  localStorage.setItem("selectedProducts", JSON.stringify(selectedProducts));
+/* MODAL */
+function showModal(id) {
+  const p = allProducts.find(x=>x.id===id);
+  document.getElementById("modalContent").innerHTML = `<h2>${p.name}</h2><p>${p.description}</p>`;
+  document.getElementById("modal").style.display = "flex";
 }
 
-async function generateRoutine() {
-  if (selectedProducts.length === 0) {
-    addMessage("Please select at least one product first.", "assistant");
-    return;
-  }
+/* ROUTINE */
+document.getElementById("generateRoutine").onclick = async () => {
+  if (!selectedProducts.length) return addMessage("Select products first","ai");
 
-  addMessage("Generating your personalized routine...", "assistant");
-
-  const prompt = `
-Create a personalized beauty routine using ONLY these selected products:
-
-${JSON.stringify(selectedProducts, null, 2)}
-
-Instructions:
-- Use only the selected products
-- Organize the routine clearly
-- Explain when to use each product
-- Keep the advice beauty-focused and practical
-- Do not invent products that are not listed
-`;
-
-  chatHistory.push({ role: "user", content: prompt });
-
-  try {
-    const reply = await sendToWorker(chatHistory);
-    chatHistory.push({ role: "assistant", content: reply });
-    addMessage(reply, "assistant");
-  } catch (error) {
-    console.error(error);
-    addMessage("There was a problem generating your routine.", "assistant");
-  }
-}
-
-async function handleChat(event) {
-  event.preventDefault();
-
-  const message = userInput.value.trim();
-  if (!message) return;
-
-  addMessage(message, "user");
-  userInput.value = "";
-
-  chatHistory.push({ role: "user", content: message });
-
-  try {
-    const reply = await sendToWorker(chatHistory);
-    chatHistory.push({ role: "assistant", content: reply });
-    addMessage(reply, "assistant");
-  } catch (error) {
-    console.error(error);
-    addMessage("There was a problem getting a response.", "assistant");
-  }
-}
-
-async function sendToWorker(messages) {
-  const response = await fetch(WORKER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ messages })
+  const res = await fetch(WORKER_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      messages:[{
+        role:"user",
+        content:`Routine for ${user.skinType} skin using: ${selectedProducts.map(p=>p.name).join(", ")}`
+      }]
+    })
   });
 
-  const data = await response.json();
+  const data = await res.json();
+  addMessage(data.reply,"ai");
 
-  if (!response.ok) {
-    throw new Error(data.error || "Worker request failed.");
-  }
+  const routines = JSON.parse(localStorage.getItem("routines"))||[];
+  routines.push(data.reply);
+  localStorage.setItem("routines",JSON.stringify(routines));
+};
 
-  return data.reply || "No response returned.";
+/* CHAT */
+document.getElementById("chatForm").onsubmit = async e=>{
+  e.preventDefault();
+
+  const input = document.getElementById("userInput");
+  const msg = input.value;
+
+  addMessage(msg,"user");
+  input.value="";
+
+  const res = await fetch(WORKER_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({messages:[{role:"user",content:msg}]})
+  });
+
+  const data = await res.json();
+  addMessage(data.reply,"ai");
+};
+
+/* UI */
+function addMessage(text,type){
+  const d=document.createElement("div");
+  d.className=type;
+  d.textContent=text;
+  chatWindow.appendChild(d);
+  chatWindow.scrollTop=chatWindow.scrollHeight;
 }
 
-function addMessage(text, sender) {
-  const messageEl = document.createElement("div");
-  messageEl.className = `msg ${sender}`;
-  messageEl.textContent = text;
-  chatWindow.appendChild(messageEl);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
+/* NAV */
+function goDashboard(){window.location.href="dashboard.html";}
+function logout(){localStorage.clear();location.reload();}
+function toggleDark(){document.body.classList.toggle("dark");}
+function updateSkin(type){user.skinType=type;localStorage.setItem("user",JSON.stringify(user));}
