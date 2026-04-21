@@ -14,6 +14,7 @@ const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const selectedProducts = document.getElementById("selectedProducts");
 const generateBtn = document.getElementById("generateRoutine");
+const clearSelectionsBtn = document.getElementById("clearSelections");
 const chatWindow = document.getElementById("chatWindow");
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
@@ -30,9 +31,8 @@ async function loadProducts() {
     const data = await res.json();
     allProducts = data.products || [];
   } catch (error) {
-    console.error("Failed to load products:", error);
-    productsContainer.innerHTML =
-      '<p class="empty-state">Failed to load products.</p>';
+    productsContainer.innerHTML = `<p class="empty-state">Failed to load products.</p>`;
+    console.error("Product load error:", error);
   }
 }
 
@@ -42,16 +42,14 @@ function renderProducts() {
   const category = categoryFilter.value;
 
   if (!category) {
-    productsContainer.innerHTML =
-      '<p class="empty-state">Choose a category to see products.</p>';
+    productsContainer.innerHTML = `<p class="empty-state">Choose a category to see products.</p>`;
     return;
   }
 
   const filtered = allProducts.filter((p) => p.category === category);
 
   if (filtered.length === 0) {
-    productsContainer.innerHTML =
-      '<p class="empty-state">No products found in this category.</p>';
+    productsContainer.innerHTML = `<p class="empty-state">No products found in this category.</p>`;
     return;
   }
 
@@ -95,8 +93,7 @@ function toggleProduct(id) {
 
 function renderSelected() {
   if (selected.length === 0) {
-    selectedProducts.innerHTML =
-      '<p class="empty-state">No products selected yet.</p>';
+    selectedProducts.innerHTML = `<p class="empty-state">No products selected yet.</p>`;
     return;
   }
 
@@ -104,6 +101,12 @@ function renderSelected() {
     .map((p) => `<div class="selected-item">${p.name}</div>`)
     .join("");
 }
+
+clearSelectionsBtn.addEventListener("click", () => {
+  selected = [];
+  renderSelected();
+  renderProducts();
+});
 
 generateBtn.addEventListener("click", async () => {
   if (selected.length === 0) {
