@@ -46,7 +46,7 @@ export default {
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
-            messages: messages,
+            messages,
             temperature: 0.7
           })
         }
