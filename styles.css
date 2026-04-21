@@ -1,95 +1,269 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: "Montserrat", sans-serif;
-  background: #f6f7fb;
+  background: linear-gradient(135deg, #f8f7f9, #f1f2f7);
+  color: #111;
 }
 
 .container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 40px 20px;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
 }
 
-h1 {
+.hero {
   text-align: center;
+  margin-bottom: 28px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 34px;
+  font-weight: 700;
 }
 
 .subtitle {
-  text-align: center;
-  color: #777;
-  margin-bottom: 30px;
+  margin: 0;
+  color: #666;
+  font-size: 15px;
 }
 
-select {
+.controls,
+.selected-section,
+.chat-section {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.label {
   display: block;
-  margin: 0 auto 30px;
-  padding: 14px;
-  border-radius: 10px;
-  width: 250px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
-#productsContainer {
+select,
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #d8d8df;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+select:focus,
+input:focus {
+  outline: none;
+  border-color: #d6001c;
+  box-shadow: 0 0 0 3px rgba(214, 0, 28, 0.12);
+}
+
+.products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
   gap: 20px;
 }
 
 .product {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  cursor: pointer;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  border: 2px solid transparent;
 }
 
-.product img {
-  height: 120px;
-  object-fit: contain;
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
 }
 
 .product.selected {
-  border: 2px solid red;
+  border-color: #d6001c;
 }
 
-#selectedProducts {
-  margin-top: 20px;
+.product img {
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.product h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.product .brand {
+  margin: 0 0 6px;
+  color: #a67b00;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.product .category {
+  margin: 0 0 12px;
+  color: #666;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.product .description {
+  margin: 0 0 16px;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.product button {
+  width: 100%;
+}
+
+.section-header {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-header h2,
+.chat-section h2 {
+  margin: 0;
+}
+
+.selected-products {
+  display: flex;
   flex-wrap: wrap;
+  gap: 10px;
+  min-height: 28px;
+  margin-bottom: 18px;
 }
 
 .selected-item {
-  background: black;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
+  background: #111;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
-#generateRoutine {
-  margin-top: 20px;
-  width: 100%;
-  padding: 14px;
-  background: red;
-  color: white;
+.primary-btn,
+.secondary-btn,
+.chat-form button,
+.product button {
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-#chatWindow {
-  margin-top: 20px;
-  background: white;
+.primary-btn {
+  width: 100%;
   padding: 15px;
-  height: 200px;
-  overflow-y: auto;
+  background: linear-gradient(135deg, #d6001c, #ff4d6d);
+  color: #fff;
 }
 
-form {
+.secondary-btn {
+  padding: 10px 14px;
+  background: #f2f2f6;
+  color: #111;
+}
+
+.product button {
+  padding: 12px;
+  background: #111;
+  color: #fff;
+}
+
+.chat-window {
+  background: #fafafa;
+  border: 1px solid #ececf2;
+  border-radius: 14px;
+  padding: 16px;
+  min-height: 240px;
+  max-height: 380px;
+  overflow-y: auto;
+  margin: 14px 0 16px;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.message.user {
+  background: #111;
+  color: #fff;
+  margin-left: 40px;
+}
+
+.message.ai {
+  background: #f0f0f5;
+  color: #111;
+  margin-right: 40px;
+}
+
+.message.status {
+  background: #fff2f4;
+  color: #b00020;
+  margin-right: 40px;
+}
+
+.chat-form {
   display: flex;
-  margin-top: 10px;
   gap: 10px;
 }
 
-input {
+.chat-form input {
   flex: 1;
-  padding: 10px;
+}
+
+.chat-form button {
+  min-width: 100px;
+  background: #111;
+  color: #fff;
+  padding: 0 18px;
+}
+
+.empty-state {
+  color: #666;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chat-form {
+    flex-direction: column;
+  }
+
+  .chat-form button {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+  }
 }
