@@ -14,25 +14,26 @@ export default {
     try {
       const { messages } = await request.json();
 
-      if (!messages || !Array.isArray(messages)) {
+      if (!Array.isArray(messages) || messages.length === 0) {
         return jsonResponse({ error: "Missing or invalid messages array." }, 400);
       }
 
-      const openaiResponse = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages,
-            temperature: 0.7
-          })
-        }
-      );
+      if (!env.OPENAI_API_KEY) {
+        return jsonResponse({ error: "OPENAI_API_KEY is missing in Worker settings." }, 500);
+      }
+
+      const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages,
+          temperature: 0.7
+        })
+      });
 
       const data = await openaiResponse.json();
 
