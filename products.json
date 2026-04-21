@@ -2,51 +2,83 @@
   "products": [
     {
       "id": 1,
-      "name": "CeraVe Cleanser",
+      "name": "CeraVe Hydrating Cleanser",
       "brand": "CeraVe",
       "category": "cleanser",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Hydrating_Facial_Cleanser.png",
-      "description": "Hydrating cleanser"
+      "description": "Gentle hydrating cleanser for dry and sensitive skin."
     },
     {
       "id": 2,
-      "name": "CeraVe Moisturizer",
+      "name": "CeraVe Foaming Cleanser",
       "brand": "CeraVe",
-      "category": "moisturizer",
-      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Moisturizing_Cream.png",
-      "description": "Deep hydration"
+      "category": "cleanser",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Foaming_Facial_Cleanser.png",
+      "description": "Foaming cleanser for normal to oily skin."
     },
     {
       "id": 3,
-      "name": "L'Oréal Serum",
-      "brand": "L'Oréal",
-      "category": "skincare",
+      "name": "L'Oréal Revitalift Moisturizer",
+      "brand": "L'Oréal Paris",
+      "category": "moisturizer",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal_Paris_Revitalift_1.5%_Hyaluronic_Acid_Serum.png",
-      "description": "Anti-aging"
+      "description": "Anti-aging moisturizer that smooths fine lines."
     },
     {
       "id": 4,
+      "name": "CeraVe Moisturizing Cream",
+      "brand": "CeraVe",
+      "category": "moisturizer",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Moisturizing_Cream.png",
+      "description": "Deep hydration cream for dry skin."
+    },
+    {
+      "id": 5,
+      "name": "Vitamin C Serum",
+      "brand": "CeraVe",
+      "category": "skincare",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Skin_Renewing_Vitamin_C_Serum.png",
+      "description": "Brightens skin and improves tone."
+    },
+    {
+      "id": 6,
+      "name": "Retinol Serum",
+      "brand": "CeraVe",
+      "category": "skincare",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Resurfacing_Retinol_Serum.png",
+      "description": "Reduces acne marks and smooths skin."
+    },
+    {
+      "id": 7,
+      "name": "L'Oréal Foundation",
+      "brand": "L'Oréal Paris",
+      "category": "makeup",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal_Paris_Infallible_Fresh_Wear_Foundation_(24H).png",
+      "description": "Long-wear foundation with full coverage."
+    },
+    {
+      "id": 8,
+      "name": "Maybelline Fit Me Foundation",
+      "brand": "Maybelline",
+      "category": "makeup",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Maybelline_Fit_Me_Matte_+_Poreless_Foundation.png",
+      "description": "Matte foundation for oily skin."
+    },
+    {
+      "id": 9,
       "name": "Garnier Shampoo",
       "brand": "Garnier",
       "category": "haircare",
       "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Garnier-Fructis-Sleek-&-Shine-Shampoo.jpg",
-      "description": "Smooth hair"
+      "description": "Smooths and reduces frizz."
     },
     {
-      "id": 5,
-      "name": "Lancôme Foundation",
-      "brand": "Lancôme",
-      "category": "makeup",
-      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Lancome-Teint-Idole-Ultra-Wear-Foundation.jpg",
-      "description": "Full coverage"
-    },
-    {
-      "id": 6,
-      "name": "YSL Perfume",
-      "brand": "YSL",
-      "category": "fragrance",
-      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Yves-Saint-Laurent-Rouge-Volupte-Shine-Lipstick-Balm.jpg",
-      "description": "Luxury scent"
+      "id": 10,
+      "name": "L'Oréal Shampoo",
+      "brand": "L'Oréal Paris",
+      "category": "haircare",
+      "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal-Paris-Elvive-Total-Repair-5-Shampoo.png",
+      "description": "Repairs damaged hair."
     }
   ]
 }
