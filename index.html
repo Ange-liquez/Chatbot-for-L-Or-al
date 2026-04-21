@@ -15,7 +15,7 @@
       <header class="hero">
         <h1>L'Oréal AI Routine Builder</h1>
         <p class="subtitle">
-          Browse real products, select your favorites, and generate a personalized routine with AI.
+          Browse products, select your favorites, and generate a personalized routine with AI.
         </p>
       </header>
 
@@ -36,30 +36,36 @@
         </select>
       </section>
 
-      <section>
-        <div id="productsContainer" class="products-grid"></div>
+      <section class="panel">
+        <div id="productsContainer" class="products-grid">
+          <p class="empty-state">Choose a category to see products.</p>
+        </div>
       </section>
 
-      <section class="selected-section">
+      <section class="panel">
         <div class="section-header">
           <h2>Selected Products</h2>
-          <button id="clearSelections" type="button" class="secondary-btn">Clear All</button>
+          <button id="clearSelections" type="button" class="secondary-btn">
+            Clear All
+          </button>
         </div>
-        <div id="selectedProducts" class="selected-products"></div>
+        <div id="selectedProducts" class="selected-products">
+          <p class="empty-state">No products selected yet.</p>
+        </div>
         <button id="generateRoutine" type="button" class="primary-btn">
           Generate Routine
         </button>
       </section>
 
-      <section class="chat-section">
+      <section class="panel">
         <h2>Routine Chat</h2>
         <div id="chatWindow" class="chat-window"></div>
-
         <form id="chatForm" class="chat-form">
           <input
             id="userInput"
             type="text"
             placeholder="Ask about your routine..."
+            autocomplete="off"
             required
           />
           <button type="submit">Send</button>
