@@ -1,1 +1,32 @@
-
+[
+  {
+    "name": "CeraVe Hydrating Cleanser",
+    "brand": "CeraVe",
+    "category": "skincare",
+    "description": "A gentle cleanser with ceramides and hyaluronic acid that helps restore the skin barrier."
+  },
+  {
+    "name": "L'Oréal Revitalift Moisturizer",
+    "brand": "L'Oréal Paris",
+    "category": "skincare",
+    "description": "An anti-aging moisturizer that helps reduce wrinkles and improve skin firmness."
+  },
+  {
+    "name": "Garnier Fructis Sleek & Shine Shampoo",
+    "brand": "Garnier",
+    "category": "haircare",
+    "description": "A smoothing shampoo that helps control frizz and add shine."
+  },
+  {
+    "name": "Lancôme Teint Idole Foundation",
+    "brand": "Lancôme",
+    "category": "makeup",
+    "description": "A long-lasting foundation that provides full coverage with a natural finish."
+  },
+  {
+    "name": "YSL Libre Eau de Parfum",
+    "brand": "Yves Saint Laurent",
+    "category": "fragrance",
+    "description": "A bold floral fragrance with notes of lavender, orange blossom, and vanilla."
+  }
+]
