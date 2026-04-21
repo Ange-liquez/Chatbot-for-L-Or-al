@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>L'Oréal Smart Advisor</title>
+  <title>L'Oréal Smart Routine Builder</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
@@ -12,6 +12,7 @@
 <body>
   <div class="container">
     <h1>L'Oréal Smart Routine Builder</h1>
+    <p class="subtitle">Build your personalized beauty routine with AI</p>
 
     <select id="categoryFilter">
       <option value="">Select Category</option>
@@ -31,8 +32,8 @@
     <div id="chatWindow"></div>
 
     <form id="chatForm">
-      <input id="userInput" placeholder="Ask something..." />
-      <button>Send</button>
+      <input id="userInput" placeholder="Ask about your routine..." required />
+      <button type="submit">Send</button>
     </form>
   </div>
 
