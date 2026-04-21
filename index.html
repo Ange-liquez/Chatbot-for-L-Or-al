@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>L'Oréal Product-Aware Routine Builder</title>
-
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+    <title>L'Oréal | Smart Routine &amp; Product Advisor</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -19,90 +18,61 @@
   <body>
     <div class="page-wrapper">
       <header class="site-header">
-        <h1 class="site-title">L'Oréal Product-Aware Routine Builder</h1>
-        <p class="site-subtitle">
-          Browse products, select your favorites, generate a personalized beauty
-          routine, and ask follow-up questions with AI.
-        </p>
+        <img src="img/loreal-logo.png" alt="L'Oréal Logo" class="logo" />
+        <h1 class="site-title">Smart Routine &amp; Product Advisor</h1>
       </header>
 
-      <main>
-        <section class="controls-section">
-          <div class="filter-group">
-            <label for="categoryFilter">Filter by Category</label>
-            <select id="categoryFilter" name="categoryFilter">
-              <option value="all">All Categories</option>
-              <option value="cleanser">Cleanser</option>
-              <option value="moisturizer">Moisturizer</option>
-              <option value="skincare">Skincare</option>
-              <option value="haircare">Haircare</option>
-              <option value="makeup">Makeup</option>
-              <option value="fragrance">Fragrance</option>
-              <option value="hair color">Hair Color</option>
-              <option value="hair styling">Hair Styling</option>
-              <option value="men's grooming">Men's Grooming</option>
-              <option value="suncare">Suncare</option>
-            </select>
-          </div>
+      <div class="search-section">
+        <select id="categoryFilter">
+          <option value="" selected>Choose a Category</option>
+          <option value="cleanser">Cleansers</option>
+          <option value="moisturizer">Moisturizers & Treatments</option>
+          <option value="skincare">Skincare</option>
+          <option value="haircare">Haircare</option>
+          <option value="makeup">Makeup</option>
+          <option value="hair color">Hair Color</option>
+          <option value="hair styling">Hair Styling</option>
+          <option value="men's grooming">Men's Grooming</option>
+          <option value="suncare">Suncare</option>
+          <option value="fragrance">Fragrance</option>
+        </select>
+      </div>
 
-          <div class="filter-group">
-            <label for="searchInput">Search Products</label>
-            <input
-              type="text"
-              id="searchInput"
-              name="searchInput"
-              placeholder="Search by name, brand, or keyword..."
-            />
-          </div>
-        </section>
+      <div id="productsContainer" class="products-grid">
+        <div class="placeholder-message">Select a category to view products</div>
+      </div>
 
-        <section class="products-section">
-          <h2 class="section-title">Products</h2>
-          <div id="productGrid" class="product-grid"></div>
-        </section>
+      <div class="selected-products">
+        <h2>Selected Products</h2>
+        <div id="selectedProductsList"></div>
+        <button id="generateRoutine" class="generate-btn" type="button">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Routine
+        </button>
+      </div>
 
-        <section class="selected-section">
-          <div class="selected-header">
-            <h2 class="section-title">Selected Products</h2>
-            <button type="button" id="clearSelectedBtn" class="secondary-btn">
-              Clear All
-            </button>
-          </div>
+      <section class="chatbox">
+        <h2>Let's Build Your Routine</h2>
+        <div id="chatWindow" class="chat-window"></div>
 
-          <ul id="selectedProductsList" class="selected-products-list"></ul>
-
-          <div class="generate-wrapper">
-            <button type="button" id="generateRoutineBtn" class="primary-btn">
-              Generate Routine
-            </button>
-          </div>
-        </section>
-
-        <section class="chatbox">
-          <h2 class="section-title">Beauty Chat</h2>
-
-          <div id="chatWindow" class="chat-window"></div>
-
-          <form id="chatForm" class="chat-form">
-            <label for="userInput" class="visually-hidden">Message</label>
-            <input
-              id="userInput"
-              name="userInput"
-              type="text"
-              placeholder="Ask a follow-up question about your routine..."
-              autocomplete="off"
-              required
-            />
-            <button type="submit" id="sendBtn">
-              <span class="material-icons">send</span>
-              <span class="visually-hidden">Send</span>
-            </button>
-          </form>
-        </section>
-      </main>
+        <form id="chatForm" class="chat-form">
+          <label for="userInput" class="visually-hidden">Message</label>
+          <input
+            id="userInput"
+            name="userInput"
+            type="text"
+            placeholder="Ask me about products or routines…"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="sendBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span class="visually-hidden">Send</span>
+          </button>
+        </form>
+      </section>
 
       <footer class="site-footer">
-        <p>&copy; 2026 L'Oréal AI Student Project. All rights reserved.</p>
+        <p>&copy; 2025 L'Oréal. All rights reserved.</p>
         <nav>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Use</a>
