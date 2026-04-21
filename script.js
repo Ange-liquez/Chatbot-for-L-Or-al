@@ -18,11 +18,8 @@ async function loadProducts() {
     const res = await fetch("./products.json");
     const data = await res.json();
     allProducts = data.products;
-
-    console.log("LOADED:", allProducts);
-  } catch (err) {
-    console.error("FAILED:", err);
-    productsContainer.innerHTML = "FAILED TO LOAD PRODUCTS";
+  } catch {
+    productsContainer.innerHTML = "Failed to load products.";
   }
 }
 
@@ -57,8 +54,13 @@ function toggleProduct(id) {
 }
 
 function renderSelected() {
+  if (selected.length === 0) {
+    selectedProducts.innerHTML = "No products selected";
+    return;
+  }
+
   selectedProducts.innerHTML = selected.map(p => `
-    <div>${p.name}</div>
+    <div class="selected-item">${p.name}</div>
   `).join("");
 }
 
@@ -69,9 +71,11 @@ generateBtn.addEventListener("click", async () => {
   }
 
   try {
-    const response = await fetch(WORKER_URL, {
+    const res = await fetch(WORKER_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         messages: [
           {
@@ -82,11 +86,11 @@ generateBtn.addEventListener("click", async () => {
       })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
     chatWindow.innerHTML += `<div>${data.reply}</div>`;
-  } catch (err) {
-    chatWindow.innerHTML += `<div>ERROR GENERATING ROUTINE</div>`;
+  } catch {
+    chatWindow.innerHTML += `<div>Error generating routine</div>`;
   }
 });
 
@@ -98,19 +102,21 @@ chatForm.addEventListener("submit", async (e) => {
   chatWindow.innerHTML += `<div><b>You:</b> ${message}</div>`;
 
   try {
-    const response = await fetch(WORKER_URL, {
+    const res = await fetch(WORKER_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         messages: [{ role: "user", content: message }]
       })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
     chatWindow.innerHTML += `<div><b>AI:</b> ${data.reply}</div>`;
   } catch {
-    chatWindow.innerHTML += `<div>ERROR</div>`;
+    chatWindow.innerHTML += `<div>Error</div>`;
   }
 
   userInput.value = "";
