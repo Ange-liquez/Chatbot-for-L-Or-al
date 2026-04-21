@@ -74,6 +74,7 @@ function jsonResponse(data, status = 200) {
     headers: {
       "Content-Type": "application/json",
       ...corsHeaders()
+      const OPENAI_API_KEY = "sk-xxxxx";
     }
   });
 }
