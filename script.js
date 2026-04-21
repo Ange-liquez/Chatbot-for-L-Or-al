@@ -7,35 +7,33 @@ let chatHistory = [
   {
     role: "system",
     content:
-      "You are a helpful L'Oréal beauty advisor. Only answer questions about the user's selected products, generated routine, skincare, haircare, makeup, fragrance, and beauty-related topics. Keep answers clear, practical, organized, and friendly. If a routine is requested, use only the selected products. Do not invent extra products."
+      "You are a L'Oréal beauty advisor. Only give advice based on selected products and beauty-related topics. Do not recommend products not selected unless asked. If the user asks for a routine, use only the selected products."
   }
 ];
 
 const categoryFilter = document.getElementById("categoryFilter");
-const searchInput = document.getElementById("searchInput");
-const productGrid = document.getElementById("productGrid");
+const productsContainer = document.getElementById("productsContainer");
 const selectedProductsList = document.getElementById("selectedProductsList");
-const clearSelectedBtn = document.getElementById("clearSelectedBtn");
-const generateRoutineBtn = document.getElementById("generateRoutineBtn");
+const generateBtn = document.getElementById("generateRoutine");
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
+productsContainer.innerHTML = `
+  <div class="placeholder-message">
+    Select a category to view products
+  </div>
+`;
+
 document.addEventListener("DOMContentLoaded", async () => {
-  addMessage(
-    "👋 Hello! I’m your L'Oréal beauty assistant. Select products, generate a personalized routine, and ask follow-up beauty questions.",
-    "assistant"
-  );
+  addMessage("👋 Select products to build your routine!", "assistant");
 
   await loadProducts();
-  renderProducts();
   renderSelectedProducts();
 
   categoryFilter.addEventListener("change", renderProducts);
-  searchInput.addEventListener("input", renderProducts);
-  clearSelectedBtn.addEventListener("click", clearAllSelections);
-  generateRoutineBtn.addEventListener("click", generateRoutine);
-  chatForm.addEventListener("submit", handleChatSubmit);
+  generateBtn.addEventListener("click", generateRoutine);
+  chatForm.addEventListener("submit", handleChat);
 });
 
 async function loadProducts() {
@@ -50,90 +48,95 @@ async function loadProducts() {
     allProducts = data.products;
 
     if (!Array.isArray(allProducts)) {
-      throw new Error("products.json is missing a valid products array.");
+      throw new Error("products.json format is invalid.");
     }
   } catch (error) {
     console.error("Error loading products:", error);
-    addMessage("Sorry, I couldn't load the product list.", "assistant");
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        Sorry, I couldn’t load the product list.
+      </div>
+    `;
+    addMessage("There was a problem loading the product list.", "assistant");
   }
 }
 
 function renderProducts() {
-  const selectedCategory = categoryFilter.value.toLowerCase();
-  const searchTerm = searchInput.value.trim().toLowerCase();
+  const selectedCategory = categoryFilter.value;
 
-  const filteredProducts = allProducts.filter((product) => {
-    const productCategory = (product.category || "").toLowerCase();
-    const productName = (product.name || "").toLowerCase();
-    const productBrand = (product.brand || "").toLowerCase();
-    const productDescription = (product.description || "").toLowerCase();
-
-    const matchesCategory =
-      selectedCategory === "all" || productCategory === selectedCategory;
-
-    const matchesSearch =
-      searchTerm === "" ||
-      productName.includes(searchTerm) ||
-      productBrand.includes(searchTerm) ||
-      productDescription.includes(searchTerm) ||
-      productCategory.includes(searchTerm);
-
-    return matchesCategory && matchesSearch;
-  });
-
-  productGrid.innerHTML = "";
-
-  if (filteredProducts.length === 0) {
-    productGrid.innerHTML = `<p class="empty-state">No products match your search.</p>`;
+  if (!selectedCategory) {
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        Select a category to view products
+      </div>
+    `;
     return;
   }
 
-  filteredProducts.forEach((product) => {
-    const isSelected = selectedProducts.some((item) => item.id === product.id);
+  const filteredProducts = allProducts.filter(
+    (product) => product.category === selectedCategory
+  );
 
-    const card = document.createElement("div");
-    card.className = `product-card ${isSelected ? "selected" : ""}`;
-
-    card.innerHTML = `
-      <div class="product-card-top">
-        <img src="${product.image}" alt="${product.name}" class="product-image" />
-        <h3>${product.name}</h3>
-        <p class="brand">${product.brand}</p>
-        <p class="category">${product.category}</p>
-      </div>
-
-      <button type="button" class="description-btn">Show Description</button>
-
-      <div class="product-description hidden">
-        <p>${product.description}</p>
+  if (filteredProducts.length === 0) {
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        No products found in this category.
       </div>
     `;
+    return;
+  }
+
+  productsContainer.innerHTML = filteredProducts
+    .map((product) => {
+      const isSelected = selectedProducts.some((p) => p.id === product.id);
+
+      return `
+        <div class="product-card ${isSelected ? "selected" : ""}" data-id="${product.id}">
+          <img src="${product.image}" alt="${product.name}" class="product-image" />
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p class="brand">${product.brand}</p>
+            <p class="category">${product.category}</p>
+            <button type="button" class="desc-btn">Details</button>
+            <div class="desc hidden">${product.description}</div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  attachProductCardEvents();
+}
+
+function attachProductCardEvents() {
+  const cards = document.querySelectorAll(".product-card");
+
+  cards.forEach((card) => {
+    const productId = Number(card.dataset.id);
+    const product = allProducts.find((p) => p.id === productId);
+    const descBtn = card.querySelector(".desc-btn");
+    const descBox = card.querySelector(".desc");
 
     card.addEventListener("click", (event) => {
-      if (event.target.classList.contains("description-btn")) return;
-      toggleProductSelection(product);
+      if (event.target.classList.contains("desc-btn")) return;
+      toggleProduct(product);
     });
 
-    const descriptionBtn = card.querySelector(".description-btn");
-    const descriptionBox = card.querySelector(".product-description");
-
-    descriptionBtn.addEventListener("click", (event) => {
+    descBtn.addEventListener("click", (event) => {
       event.stopPropagation();
-      descriptionBox.classList.toggle("hidden");
-      descriptionBtn.textContent = descriptionBox.classList.contains("hidden")
-        ? "Show Description"
-        : "Hide Description";
+      descBox.classList.toggle("hidden");
+      descBtn.textContent = descBox.classList.contains("hidden")
+        ? "Details"
+        : "Hide Details";
     });
-
-    productGrid.appendChild(card);
   });
 }
 
-function toggleProductSelection(product) {
-  const alreadySelected = selectedProducts.some((item) => item.id === product.id);
+function toggleProduct(product) {
+  const exists = selectedProducts.some((p) => p.id === product.id);
 
-  if (alreadySelected) {
-    selectedProducts = selectedProducts.filter((item) => item.id !== product.id);
+  if (exists) {
+    selectedProducts = selectedProducts.filter((p) => p.id !== product.id);
   } else {
     selectedProducts.push(product);
   }
@@ -144,42 +147,38 @@ function toggleProductSelection(product) {
 }
 
 function renderSelectedProducts() {
-  selectedProductsList.innerHTML = "";
+  if (!selectedProductsList) return;
 
   if (selectedProducts.length === 0) {
-    selectedProductsList.innerHTML =
-      `<li class="empty-state">No products selected yet.</li>`;
+    selectedProductsList.innerHTML = `<p class="empty-state">No products selected yet.</p>`;
     return;
   }
 
-  selectedProducts.forEach((product) => {
-    const li = document.createElement("li");
-    li.className = "selected-item";
+  selectedProductsList.innerHTML = selectedProducts
+    .map(
+      (product) => `
+        <div class="selected-item">
+          <div class="selected-text">
+            <strong>${product.name}</strong>
+            <span>${product.brand}</span>
+          </div>
+          <button type="button" class="remove-btn" data-id="${product.id}">Remove</button>
+        </div>
+      `
+    )
+    .join("");
 
-    li.innerHTML = `
-      <div class="selected-item-info">
-        <strong>${product.name}</strong>
-        <span>${product.brand} • ${product.category}</span>
-      </div>
-      <button type="button" class="remove-btn">Remove</button>
-    `;
+  const removeButtons = selectedProductsList.querySelectorAll(".remove-btn");
 
-    li.querySelector(".remove-btn").addEventListener("click", () => {
-      selectedProducts = selectedProducts.filter((item) => item.id !== product.id);
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = Number(button.dataset.id);
+      selectedProducts = selectedProducts.filter((p) => p.id !== productId);
       saveSelections();
       renderProducts();
       renderSelectedProducts();
     });
-
-    selectedProductsList.appendChild(li);
   });
-}
-
-function clearAllSelections() {
-  selectedProducts = [];
-  saveSelections();
-  renderProducts();
-  renderSelectedProducts();
 }
 
 function saveSelections() {
@@ -188,53 +187,38 @@ function saveSelections() {
 
 async function generateRoutine() {
   if (selectedProducts.length === 0) {
-    addMessage(
-      "Please select at least one product before generating a routine.",
-      "assistant"
-    );
+    addMessage("Please select at least one product first.", "assistant");
     return;
   }
 
-  const productData = selectedProducts.map((product) => ({
-    id: product.id,
-    name: product.name,
-    brand: product.brand,
-    category: product.category,
-    description: product.description
-  }));
-
   addMessage("Generating your personalized routine...", "assistant");
 
-  const routinePrompt = `
+  const prompt = `
 Create a personalized beauty routine using ONLY these selected products:
 
-${JSON.stringify(productData, null, 2)}
+${JSON.stringify(selectedProducts, null, 2)}
 
 Instructions:
 - Use only the selected products
 - Organize the routine clearly
-- Separate into morning and evening if appropriate
-- Briefly explain why each product is used
-- Keep the advice practical, personalized, and beauty-focused
-- Do not invent extra products
+- Explain when to use each product
+- Keep the advice beauty-focused and practical
+- Do not invent products that are not listed
 `;
 
-  chatHistory.push({
-    role: "user",
-    content: routinePrompt
-  });
+  chatHistory.push({ role: "user", content: prompt });
 
   try {
-    const aiReply = await sendToWorker(chatHistory);
-    chatHistory.push({ role: "assistant", content: aiReply });
-    addMessage(aiReply, "assistant");
+    const reply = await sendToWorker(chatHistory);
+    chatHistory.push({ role: "assistant", content: reply });
+    addMessage(reply, "assistant");
   } catch (error) {
     console.error(error);
-    addMessage(`Error: ${error.message}`, "assistant");
+    addMessage("There was a problem generating your routine.", "assistant");
   }
 }
 
-async function handleChatSubmit(event) {
+async function handleChat(event) {
   event.preventDefault();
 
   const message = userInput.value.trim();
@@ -243,18 +227,15 @@ async function handleChatSubmit(event) {
   addMessage(message, "user");
   userInput.value = "";
 
-  chatHistory.push({
-    role: "user",
-    content: message
-  });
+  chatHistory.push({ role: "user", content: message });
 
   try {
-    const aiReply = await sendToWorker(chatHistory);
-    chatHistory.push({ role: "assistant", content: aiReply });
-    addMessage(aiReply, "assistant");
+    const reply = await sendToWorker(chatHistory);
+    chatHistory.push({ role: "assistant", content: reply });
+    addMessage(reply, "assistant");
   } catch (error) {
     console.error(error);
-    addMessage(`Error: ${error.message}`, "assistant");
+    addMessage("There was a problem getting a response.", "assistant");
   }
 }
 
@@ -270,7 +251,7 @@ async function sendToWorker(messages) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Failed to get response.");
+    throw new Error(data.error || "Worker request failed.");
   }
 
   return data.reply || "No response returned.";
@@ -278,7 +259,7 @@ async function sendToWorker(messages) {
 
 function addMessage(text, sender) {
   const messageEl = document.createElement("div");
-  messageEl.classList.add("msg", sender);
+  messageEl.className = `msg ${sender}`;
   messageEl.textContent = text;
   chatWindow.appendChild(messageEl);
   chatWindow.scrollTop = chatWindow.scrollHeight;
