@@ -6,7 +6,7 @@ let chatHistory = [
   {
     role: "system",
     content:
-      "You are a L'Oréal beauty advisor. Build clear, helpful routines using only the products provided by the user. Organize routines into Morning and Night when appropriate. Explain what each product does and how to use it. If the user asks follow-up questions, answer based on the routine and selected products."
+      "You are a helpful L'Oréal beauty advisor. Build clear, practical routines using only the selected products provided by the user. Organize routines into Morning and Night when appropriate. Answer follow-up questions about the selected products and routine."
   }
 ];
 
@@ -14,7 +14,6 @@ const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const selectedProducts = document.getElementById("selectedProducts");
 const generateBtn = document.getElementById("generateRoutine");
-const clearSelectionsBtn = document.getElementById("clearSelections");
 const chatWindow = document.getElementById("chatWindow");
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
@@ -31,8 +30,9 @@ async function loadProducts() {
     const data = await res.json();
     allProducts = data.products || [];
   } catch (error) {
-    productsContainer.innerHTML = `<p class="empty-state">Failed to load products.</p>`;
-    console.error("Product load error:", error);
+    console.error("Failed to load products:", error);
+    productsContainer.innerHTML =
+      '<p class="empty-state">Failed to load products.</p>';
   }
 }
 
@@ -42,14 +42,16 @@ function renderProducts() {
   const category = categoryFilter.value;
 
   if (!category) {
-    productsContainer.innerHTML = `<p class="empty-state">Choose a category to see products.</p>`;
+    productsContainer.innerHTML =
+      '<p class="empty-state">Choose a category to see products.</p>';
     return;
   }
 
   const filtered = allProducts.filter((p) => p.category === category);
 
   if (filtered.length === 0) {
-    productsContainer.innerHTML = `<p class="empty-state">No products found in this category.</p>`;
+    productsContainer.innerHTML =
+      '<p class="empty-state">No products found in this category.</p>';
     return;
   }
 
@@ -57,7 +59,7 @@ function renderProducts() {
     .map(
       (p) => `
         <div class="product ${selected.some((item) => item.id === p.id) ? "selected" : ""}">
-          <img src="${p.image}" alt="${p.name}" />
+          <img src="${p.image}" alt="${p.name}">
           <h3>${p.name}</h3>
           <p class="brand">${p.brand}</p>
           <p class="category">${p.category}</p>
@@ -93,24 +95,15 @@ function toggleProduct(id) {
 
 function renderSelected() {
   if (selected.length === 0) {
-    selectedProducts.innerHTML = `<p class="empty-state">No products selected yet.</p>`;
+    selectedProducts.innerHTML =
+      '<p class="empty-state">No products selected yet.</p>';
     return;
   }
 
   selectedProducts.innerHTML = selected
-    .map(
-      (p) => `
-        <div class="selected-item">${p.name}</div>
-      `
-    )
+    .map((p) => `<div class="selected-item">${p.name}</div>`)
     .join("");
 }
-
-clearSelectionsBtn.addEventListener("click", () => {
-  selected = [];
-  renderSelected();
-  renderProducts();
-});
 
 generateBtn.addEventListener("click", async () => {
   if (selected.length === 0) {
@@ -144,26 +137,12 @@ Instructions:
   chatHistory.push({ role: "user", content: prompt });
 
   try {
-    const res = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ messages: chatHistory })
-    });
-
-    const data = await res.json();
-
-    if (!data.reply) {
-      addMessage("AI failed to respond. Please try again.", "status");
-      return;
-    }
-
-    chatHistory.push({ role: "assistant", content: data.reply });
-    addMessage(data.reply, "ai");
+    const reply = await sendToWorker(chatHistory);
+    chatHistory.push({ role: "assistant", content: reply });
+    addMessage(reply, "ai");
   } catch (error) {
     console.error("Routine generation error:", error);
-    addMessage("Error generating routine.", "status");
+    addMessage(`AI failed to respond. ${error.message}`, "status");
   }
 });
 
@@ -178,28 +157,37 @@ chatForm.addEventListener("submit", async (e) => {
   chatHistory.push({ role: "user", content: message });
 
   try {
-    const res = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ messages: chatHistory })
-    });
-
-    const data = await res.json();
-
-    if (!data.reply) {
-      addMessage("AI failed to respond.", "status");
-      return;
-    }
-
-    chatHistory.push({ role: "assistant", content: data.reply });
-    addMessage(data.reply, "ai");
+    const reply = await sendToWorker(chatHistory);
+    chatHistory.push({ role: "assistant", content: reply });
+    addMessage(reply, "ai");
   } catch (error) {
     console.error("Chat error:", error);
-    addMessage("Error getting response.", "status");
+    addMessage(`AI failed to respond. ${error.message}`, "status");
   }
 });
+
+async function sendToWorker(messages) {
+  const response = await fetch(WORKER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ messages })
+  });
+
+  const data = await response.json();
+  console.log("Worker response:", data);
+
+  if (!response.ok) {
+    throw new Error(data.error || "Worker request failed.");
+  }
+
+  if (!data.reply) {
+    throw new Error("No reply field returned from Worker.");
+  }
+
+  return data.reply;
+}
 
 function addMessage(text, sender) {
   const div = document.createElement("div");
