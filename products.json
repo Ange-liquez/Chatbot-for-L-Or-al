@@ -1,32 +1,44 @@
-[
-  {
-    "name": "CeraVe Hydrating Cleanser",
-    "brand": "CeraVe",
-    "category": "skincare",
-    "description": "A gentle cleanser with ceramides and hyaluronic acid that helps restore the skin barrier."
-  },
-  {
-    "name": "L'Oréal Revitalift Moisturizer",
-    "brand": "L'Oréal Paris",
-    "category": "skincare",
-    "description": "An anti-aging moisturizer that helps reduce the appearance of wrinkles and improve skin firmness."
-  },
-  {
-    "name": "Garnier Fructis Sleek & Shine Shampoo",
-    "brand": "Garnier",
-    "category": "haircare",
-    "description": "A smoothing shampoo that helps reduce frizz and leaves hair soft and shiny."
-  },
-  {
-    "name": "Lancôme Teint Idole Foundation",
-    "brand": "Lancôme",
-    "category": "makeup",
-    "description": "A long-wear foundation that provides buildable coverage with a natural-looking finish."
-  },
-  {
-    "name": "YSL Libre Eau de Parfum",
-    "brand": "Yves Saint Laurent",
-    "category": "fragrance",
-    "description": "A bold floral fragrance with notes of lavender, orange blossom, and vanilla."
-  }
-]
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "CeraVe Hydrating Cleanser",
+      "brand": "CeraVe",
+      "category": "skincare",
+      "image": "https://via.placeholder.com/150",
+      "description": "A gentle cleanser with ceramides and hyaluronic acid that helps restore the skin barrier."
+    },
+    {
+      "id": 2,
+      "name": "L'Oréal Revitalift Moisturizer",
+      "brand": "L'Oréal Paris",
+      "category": "skincare",
+      "image": "https://via.placeholder.com/150",
+      "description": "An anti-aging moisturizer that helps reduce the appearance of wrinkles and improve skin firmness."
+    },
+    {
+      "id": 3,
+      "name": "Garnier Fructis Sleek & Shine Shampoo",
+      "brand": "Garnier",
+      "category": "haircare",
+      "image": "https://via.placeholder.com/150",
+      "description": "A smoothing shampoo that helps reduce frizz and leaves hair soft and shiny."
+    },
+    {
+      "id": 4,
+      "name": "Lancôme Teint Idole Foundation",
+      "brand": "Lancôme",
+      "category": "makeup",
+      "image": "https://via.placeholder.com/150",
+      "description": "A long-wear foundation that provides buildable coverage with a natural-looking finish."
+    },
+    {
+      "id": 5,
+      "name": "YSL Libre Eau de Parfum",
+      "brand": "Yves Saint Laurent",
+      "category": "fragrance",
+      "image": "https://via.placeholder.com/150",
+      "description": "A bold floral fragrance with notes of lavender, orange blossom, and vanilla."
+    }
+  ]
+}
