@@ -1,6 +1,5 @@
 export default {
   async fetch(request, env) {
-    // Handle CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -8,7 +7,6 @@ export default {
       });
     }
 
-    // Only allow POST
     if (request.method !== "POST") {
       return new Response(
         JSON.stringify({ error: "Method not allowed" }),
@@ -38,18 +36,21 @@ export default {
         );
       }
 
-      const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: messages,
-          temperature: 0.7
-        })
-      });
+      const openaiResponse = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: messages,
+            temperature: 0.7
+          })
+        }
+      );
 
       const data = await openaiResponse.json();
 
@@ -70,16 +71,13 @@ export default {
 
       const reply = data.choices?.[0]?.message?.content || "No response returned.";
 
-      return new Response(
-        JSON.stringify({ reply }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders()
-          }
+      return new Response(JSON.stringify({ reply }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders()
         }
-      );
+      });
     } catch (error) {
       return new Response(
         JSON.stringify({
