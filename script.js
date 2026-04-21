@@ -19,11 +19,13 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
-productsContainer.innerHTML = `
-  <div class="placeholder-message">
-    Select a category to view products
-  </div>
-`;
+if (productsContainer) {
+  productsContainer.innerHTML = `
+    <div class="placeholder-message">
+      Select a category to view products
+    </div>
+  `;
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
   addMessage("👋 Select products to build your routine!", "assistant");
