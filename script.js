@@ -43,15 +43,27 @@ async function loadProducts() {
     const response = await fetch("./products.json");
 
     if (!response.ok) {
-      throw new Error("Could not load products.json");
+      throw new Error(`Could not load products.json (${response.status})`);
     }
 
     const data = await response.json();
-    allProducts = data.products;
 
-    if (!Array.isArray(allProducts)) {
+    if (Array.isArray(data)) {
+      allProducts = data;
+    } else if (Array.isArray(data.products)) {
+      allProducts = data.products;
+    } else {
       throw new Error("products.json format is invalid.");
     }
+
+    allProducts = allProducts.map((product, index) => ({
+      id: product.id ?? index + 1,
+      name: product.name ?? "Unnamed Product",
+      brand: product.brand ?? "Unknown Brand",
+      category: product.category ?? "skincare",
+      image: product.image ?? "https://via.placeholder.com/150",
+      description: product.description ?? "No description available."
+    }));
   } catch (error) {
     console.error("Error loading products:", error);
     productsContainer.innerHTML = `
