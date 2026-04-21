@@ -8,33 +8,17 @@ export default {
     }
 
     if (request.method !== "POST") {
-      return new Response(
-        JSON.stringify({ error: "Method not allowed" }),
-        {
-          status: 405,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders()
-          }
+      return new Response(JSON.stringify({ error: "Method not allowed" }), {
+        status: 405,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders()
         }
-      );
+      });
     }
 
     try {
       const { messages } = await request.json();
-
-      if (!messages || !Array.isArray(messages)) {
-        return new Response(
-          JSON.stringify({ error: "Missing or invalid messages array." }),
-          {
-            status: 400,
-            headers: {
-              "Content-Type": "application/json",
-              ...corsHeaders()
-            }
-          }
-        );
-      }
 
       const openaiResponse = await fetch(
         "https://api.openai.com/v1/chat/completions",
@@ -42,12 +26,11 @@ export default {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
+            Authorization: `Bearer ${env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
-            messages,
-            temperature: 0.7
+            messages: messages
           })
         }
       );
@@ -56,11 +39,9 @@ export default {
 
       if (!openaiResponse.ok) {
         return new Response(
-          JSON.stringify({
-            error: data.error?.message || "OpenAI request failed."
-          }),
+          JSON.stringify({ error: data.error?.message || "OpenAI error" }),
           {
-            status: openaiResponse.status,
+            status: 500,
             headers: {
               "Content-Type": "application/json",
               ...corsHeaders()
@@ -69,20 +50,20 @@ export default {
         );
       }
 
-      const reply = data.choices?.[0]?.message?.content || "No response returned.";
-
-      return new Response(JSON.stringify({ reply }), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders()
-        }
-      });
-    } catch (error) {
       return new Response(
         JSON.stringify({
-          error: error.message || "Something went wrong."
+          reply: data.choices[0].message.content
         }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders()
+          }
+        }
+      );
+    } catch (err) {
+      return new Response(
+        JSON.stringify({ error: err.message }),
         {
           status: 500,
           headers: {
