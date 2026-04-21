@@ -1,11 +1,9 @@
-/* ---------- Reset ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ---------- Base ---------- */
 body {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   color: #2d2d2d;
@@ -21,7 +19,6 @@ body {
   max-width: 1100px;
 }
 
-/* ---------- Header ---------- */
 .site-header {
   text-align: center;
   padding: 40px 0 24px;
@@ -42,7 +39,6 @@ body {
   margin: 0 auto;
 }
 
-/* ---------- Section Titles ---------- */
 .section-title {
   font-size: 1.3rem;
   font-weight: 700;
@@ -50,7 +46,6 @@ body {
   color: #111;
 }
 
-/* ---------- Controls ---------- */
 .controls-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -92,7 +87,6 @@ body {
   border-color: #ff003b;
 }
 
-/* ---------- Products ---------- */
 .products-section,
 .selected-section,
 .chatbox {
@@ -126,6 +120,15 @@ body {
 .product-card.selected {
   border-color: #ff003b;
   box-shadow: 0 12px 24px rgba(255, 0, 59, 0.16);
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
 .product-card-top h3 {
@@ -179,7 +182,6 @@ body {
   display: none;
 }
 
-/* ---------- Selected Products ---------- */
 .selected-header {
   display: flex;
   justify-content: space-between;
@@ -227,7 +229,6 @@ body {
   justify-content: flex-end;
 }
 
-/* ---------- Buttons ---------- */
 .primary-btn,
 .secondary-btn,
 .remove-btn {
@@ -269,7 +270,6 @@ body {
   background: #e8e8e8;
 }
 
-/* ---------- Chat ---------- */
 .chat-window {
   min-height: 320px;
   max-height: 420px;
@@ -301,12 +301,6 @@ body {
 .msg.assistant {
   color: #333;
   background: #f0f0f0;
-}
-
-.msg.system {
-  color: #5c4663;
-  background: #f6ebff;
-  max-width: 100%;
 }
 
 .chat-form {
@@ -347,7 +341,6 @@ body {
   font-size: 24px;
 }
 
-/* ---------- Utilities ---------- */
 .empty-state {
   color: #777;
   font-size: 0.96rem;
@@ -366,7 +359,6 @@ body {
   border: 0;
 }
 
-/* ---------- Footer ---------- */
 .site-footer {
   margin: 40px 0 34px;
   text-align: center;
@@ -388,7 +380,6 @@ body {
   color: #ff003b;
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .controls-section {
     grid-template-columns: 1fr;
@@ -436,10 +427,6 @@ body {
   .chat-window {
     min-height: 280px;
     font-size: 0.95rem;
-  }
-
-  .chat-form {
-    flex-direction: row;
   }
 
   .chat-form input {
