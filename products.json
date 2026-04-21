@@ -3,30 +3,35 @@
     "name": "CeraVe Hydrating Cleanser",
     "brand": "CeraVe",
     "category": "skincare",
+    "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/CeraVe_Hydrating_Facial_Cleanser.png",
     "description": "A gentle cleanser with ceramides and hyaluronic acid that helps restore the skin barrier."
   },
   {
     "name": "L'Oréal Revitalift Moisturizer",
     "brand": "L'Oréal Paris",
     "category": "skincare",
+    "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Loreal_Paris_Revitalift_1.5%_Hyaluronic_Acid_Serum.png",
     "description": "An anti-aging moisturizer that helps reduce the appearance of wrinkles and improve skin firmness."
   },
   {
     "name": "Garnier Fructis Sleek & Shine Shampoo",
     "brand": "Garnier",
     "category": "haircare",
+    "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Garnier-Fructis-Sleek-&-Shine-Shampoo.jpg",
     "description": "A smoothing shampoo that helps reduce frizz and leaves hair soft and shiny."
   },
   {
     "name": "Lancôme Teint Idole Foundation",
     "brand": "Lancôme",
     "category": "makeup",
+    "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Lancome-Teint-Idole-Ultra-Wear-Foundation.jpg",
     "description": "A long-wear foundation that provides buildable coverage with a natural-looking finish."
   },
   {
     "name": "YSL Libre Eau de Parfum",
     "brand": "Yves Saint Laurent",
     "category": "fragrance",
+    "image": "https://cdn.jsdelivr.net/gh/GCA-Classroom/09-loreal-images/img/Yves-Saint-Laurent-Rouge-Volupte-Shine-Lipstick-Balm.jpg",
     "description": "A bold floral fragrance with notes of lavender, orange blossom, and vanilla."
   }
 ]
