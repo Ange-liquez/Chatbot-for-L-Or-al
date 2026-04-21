@@ -31,8 +31,8 @@ async function loadProducts() {
     const data = await res.json();
     allProducts = data.products || [];
   } catch (error) {
-    productsContainer.innerHTML = `<p class="empty-state">Failed to load products.</p>`;
     console.error("Product load error:", error);
+    productsContainer.innerHTML = `<p class="empty-state">Failed to load products.</p>`;
   }
 }
 
@@ -102,11 +102,13 @@ function renderSelected() {
     .join("");
 }
 
-clearSelectionsBtn.addEventListener("click", () => {
-  selected = [];
-  renderSelected();
-  renderProducts();
-});
+if (clearSelectionsBtn) {
+  clearSelectionsBtn.addEventListener("click", () => {
+    selected = [];
+    renderSelected();
+    renderProducts();
+  });
+}
 
 generateBtn.addEventListener("click", async () => {
   if (selected.length === 0) {
